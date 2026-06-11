@@ -1,0 +1,43 @@
+#==============================================================================
+# SECURITY SCAN WORKFLOW — OWASP ZAP BASELINE
+#==============================================================================
+# Weekly passive scan of the live site (plus on demand). Runs only when the
+# SITE_URL repository variable is set. `-I` reports warnings without failing
+# the job; review the uploaded HTML report and tighten over time.
+#------------------------------------------------------------------------------
+
+name: Security scan (OWASP ZAP)
+
+on:
+  schedule:
+    - cron: "0 4 * * 1" # Mondays 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zap-baseline:
+    name: ZAP baseline scan
+    if: ${{ vars.SITE_URL != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      #------------------------------------------------------------------------
+      # SCAN
+      #------------------------------------------------------------------------
+      - name: Run ZAP baseline
+        run: |
+          mkdir -p zap-output
+          chmod 777 zap-output  # the ZAP container writes as its own user
+          docker run --rm -v "$PWD/zap-output:/zap/wrk:rw" \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t "${{ vars.SITE_URL }}" -I -r zap-report.html
+
+      #------------------------------------------------------------------------
+      # REPORT
+      #------------------------------------------------------------------------
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: zap-output/zap-report.html

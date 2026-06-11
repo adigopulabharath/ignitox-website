@@ -1,0 +1,73 @@
+#==============================================================================
+# CI WORKFLOW — LINT, TYPECHECK, AUDIT, OPENAPI & BUILD
+#==============================================================================
+# Runs on every PR and push to main. Fails on: ESLint errors, type errors,
+# high-severity dependency vulnerabilities, OpenAPI lint errors, stale
+# generated API types, or a broken production build.
+#------------------------------------------------------------------------------
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint, typecheck, audit & build
+    runs-on: ubuntu-latest
+    steps:
+      #------------------------------------------------------------------------
+      # SETUP
+      #------------------------------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      #------------------------------------------------------------------------
+      # QUALITY GATES
+      #------------------------------------------------------------------------
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Audit dependencies (fail on high severity)
+        run: npm audit --audit-level=high
+
+      #------------------------------------------------------------------------
+      # OPENAPI CONTRACT
+      #------------------------------------------------------------------------
+      - name: Lint OpenAPI spec (Spectral)
+        run: npx --yes @stoplight/spectral-cli lint openapi/openapi.yaml
+
+      - name: Verify generated API types are current
+        run: |
+          npm run gen:api
+          git diff --exit-code -- src/lib/api/types.gen.ts \
+            || { echo "::error::Generated API types are stale — run 'npm run gen:api' and commit."; exit 1; }
+
+      #------------------------------------------------------------------------
+      # BUILD
+      #------------------------------------------------------------------------
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1

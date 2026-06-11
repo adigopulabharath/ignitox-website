@@ -1,0 +1,36 @@
+#==============================================================================
+# DEPENDABOT CONFIGURATION
+#==============================================================================
+# Weekly update PRs for npm packages, GitHub Actions and the Docker base
+# image. Security updates open immediately regardless of schedule.
+#------------------------------------------------------------------------------
+
+version: 2
+
+updates:
+  #----------------------------------------------------------------------------
+  # NPM PACKAGES
+  #----------------------------------------------------------------------------
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  #----------------------------------------------------------------------------
+  # GITHUB ACTIONS
+  #----------------------------------------------------------------------------
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+
+  #----------------------------------------------------------------------------
+  # DOCKER BASE IMAGE
+  #----------------------------------------------------------------------------
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly

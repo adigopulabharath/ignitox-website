@@ -1,0 +1,66 @@
+#==============================================================================
+# DOCKER COMPOSE CONFIGURATION
+#==============================================================================
+# Production stack on the Hetzner VPS (lives at /opt/ignitox). nginx owns the
+# published ports; the app is only reachable through it. Runtime secrets come
+# from /opt/ignitox/.env (see .env.example — never committed).
+#
+#   IGNITOX_IMAGE_TAG=<git sha>  pins a release (set by the deploy workflow);
+#   defaults to `latest` for manual operation.
+#------------------------------------------------------------------------------
+
+services:
+  #----------------------------------------------------------------------------
+  # WEB APPLICATION SERVICE — Next.js standalone (image built by CI)
+  #----------------------------------------------------------------------------
+  web:
+    image: ghcr.io/adigopulabharath/ignitox-website:${IGNITOX_IMAGE_TAG:-latest}
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - "3000"
+    networks:
+      - internal
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  #----------------------------------------------------------------------------
+  # REVERSE PROXY SERVICE — nginx (TLS, security headers, rate limiting)
+  #----------------------------------------------------------------------------
+  proxy:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/snippets:/etc/nginx/snippets:ro
+      # Cloudflare Origin CA cert + key, placed by the server bootstrap steps.
+      - /etc/ssl/cloudflare:/etc/ssl/cloudflare:ro
+    networks:
+      - internal
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+#------------------------------------------------------------------------------
+# NETWORKS
+#------------------------------------------------------------------------------
+networks:
+  internal:
+    driver: bridge
