@@ -1,0 +1,8 @@
+#==============================================================================
+# SPECTRAL — OPENAPI LINT RULESET
+#==============================================================================
+# Used by CI to lint openapi/openapi.yaml. Extends the recommended OpenAPI
+# ruleset; tighten with custom rules as the API grows.
+#------------------------------------------------------------------------------
+
+extends: ["spectral:oas"]

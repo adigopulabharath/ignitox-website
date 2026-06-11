@@ -1,0 +1,205 @@
+#==============================================================================
+# IGNITOX WEBSITE API — OPENAPI 3.1 SPECIFICATION
+#==============================================================================
+# Single source of truth for every API endpoint. Workflow (schema-first):
+#   1. Change this file.
+#   2. Run `npm run gen:api` to regenerate src/lib/api/types.gen.ts.
+#   3. Implement/adjust the route handler against the generated types.
+# CI lints this spec with Spectral and fails if the generated types drift.
+#------------------------------------------------------------------------------
+
+openapi: 3.1.0
+
+#------------------------------------------------------------------------------
+# API METADATA
+#------------------------------------------------------------------------------
+info:
+  title: Ignitox Website API
+  version: 1.0.0
+  description: >-
+    Public API behind the Ignitox marketing site. All endpoints are
+    intentionally unauthenticated but protected against abuse with Cloudflare
+    Turnstile verification, per-IP rate limiting (in nginx and in-handler),
+    strict input validation and payload size caps.
+  contact:
+    name: Ignitox Engineering
+    email: hello@ignitox.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://ignitox.com
+    description: Production
+  - url: http://localhost:3000
+    description: Local development
+
+tags:
+  - name: contact
+    description: Lead-generation endpoints for the public website.
+
+#------------------------------------------------------------------------------
+# PATHS
+#------------------------------------------------------------------------------
+paths:
+  /api/contact:
+    post:
+      operationId: submitContactForm
+      tags: [contact]
+      summary: Submit the contact form
+      description: >-
+        Accepts a contact/lead inquiry and forwards it to the Ignitox team by
+        email. Protected by Cloudflare Turnstile (when configured), a honeypot
+        field, per-IP rate limiting and strict validation. Successful
+        submissions return 202 because delivery happens asynchronously from
+        the visitor's perspective.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactRequest"
+      responses:
+        "202":
+          description: Submission accepted and queued for delivery.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactAccepted"
+        "400":
+          description: Malformed JSON or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "403":
+          description: Turnstile anti-bot verification failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "413":
+          description: Request body exceeds the size limit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "429":
+          description: Rate limit exceeded for this client.
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Unexpected server error (e.g. email delivery failure).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+#------------------------------------------------------------------------------
+# COMPONENTS
+#------------------------------------------------------------------------------
+components:
+  schemas:
+    #--------------------------------------------------------------------------
+    # CONTACT REQUEST
+    #--------------------------------------------------------------------------
+    ContactRequest:
+      type: object
+      additionalProperties: false
+      required: [name, email, service, message]
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Sender's name.
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: Reply-to email address.
+        service:
+          type: string
+          description: >-
+            Service of interest. Must stay in sync with the slugs in
+            src/content/services.ts (compile-time checked in
+            src/lib/contact-schema.ts).
+          enum:
+            - cloud-solutions
+            - web-development
+            - website-hosting
+            - it-consulting
+            - general
+        message:
+          type: string
+          minLength: 10
+          maxLength: 2000
+          description: Project details / inquiry body.
+        companyWebsite:
+          type: string
+          maxLength: 0
+          description: >-
+            Honeypot — hidden from humans by the UI and must be empty.
+            Submissions with a value are silently discarded.
+        turnstileToken:
+          type: string
+          maxLength: 4096
+          description: >-
+            Cloudflare Turnstile response token. Required whenever Turnstile
+            is configured on the server.
+
+    #--------------------------------------------------------------------------
+    # SUCCESS RESPONSE
+    #--------------------------------------------------------------------------
+    ContactAccepted:
+      type: object
+      additionalProperties: false
+      required: [ok, message]
+      properties:
+        ok:
+          const: true
+        message:
+          type: string
+          description: Human-readable confirmation shown to the visitor.
+
+    #--------------------------------------------------------------------------
+    # ERROR RESPONSE
+    #--------------------------------------------------------------------------
+    ApiError:
+      type: object
+      additionalProperties: false
+      required: [ok, code, message]
+      properties:
+        ok:
+          const: false
+        code:
+          type: string
+          description: Machine-readable error category.
+          enum:
+            - invalid_json
+            - validation_error
+            - turnstile_failed
+            - payload_too_large
+            - rate_limited
+            - internal_error
+        message:
+          type: string
+          description: Human-readable error shown to the visitor.
+        issues:
+          type: array
+          description: Field-level validation problems (validation_error only).
+          items:
+            type: object
+            additionalProperties: false
+            required: [field, message]
+            properties:
+              field:
+                type: string
+              message:
+                type: string
