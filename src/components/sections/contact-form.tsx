@@ -34,7 +34,7 @@ declare global {
 // FIELD STYLES
 //------------------------------------------------------------------------------
 const fieldClasses =
-  "w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-foreground placeholder:text-muted/60 transition-colors focus:border-flame/60";
+  "w-full rounded-lg border border-border bg-surface-2 px-4 py-2.5 text-sm text-foreground placeholder:text-muted/60 transition-colors focus:border-flame/60";
 
 const labelClasses = "mb-2 block text-sm font-medium text-foreground";
 
@@ -88,7 +88,7 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8"
+      className="rounded-2xl border border-border bg-surface p-6 sm:p-8"
       noValidate={false}
     >
       <div className="grid gap-5">
@@ -197,7 +197,7 @@ export function ContactForm() {
             <div
               className="cf-turnstile"
               data-sitekey={TURNSTILE_SITE_KEY}
-              data-theme="dark"
+              data-theme="auto"
             />
           </>
         )}

@@ -9,8 +9,10 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/content/site";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/sections/header";
 import { Footer } from "@/components/sections/footer";
+import { CursorGlow } from "@/components/motion/cursor-glow";
 import { JsonLd } from "@/components/json-ld";
 
 //------------------------------------------------------------------------------
@@ -48,8 +50,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 //------------------------------------------------------------------------------
@@ -74,12 +78,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    // suppressHydrationWarning: next-themes mutates the class on <html> before
+    // hydration to apply the persisted theme.
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="flex min-h-svh flex-col bg-background font-sans text-foreground antialiased">
-        <JsonLd data={organizationJsonLd} />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <ThemeProvider>
+          <JsonLd data={organizationJsonLd} />
+          <CursorGlow />
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

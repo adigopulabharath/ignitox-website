@@ -34,7 +34,7 @@ function MarqueeRow({ hidden = false }: { hidden?: boolean }) {
 //------------------------------------------------------------------------------
 export function LogoMarquee() {
   return (
-    <section className="border-y border-white/5 py-10">
+    <section className="border-y border-border py-10">
       <p className="text-center font-mono text-xs uppercase tracking-[0.25em] text-muted/60">
         Powering workloads on
       </p>

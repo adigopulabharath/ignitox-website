@@ -1,21 +1,47 @@
 /*============================================================================*/
 /* GLOBAL STYLES & DESIGN TOKENS                                              */
 /*============================================================================*/
-/* Dark-only, Vercel-inspired theme: near-black canvas, zinc text and a       */
-/* flame→ember accent gradient ("ignite"). Tailwind v4 CSS-first config —     */
-/* all theme tokens live here, there is no tailwind.config file.              */
+/* Vercel-inspired dual theme — light by default, class-based dark mode       */
+/* (toggled on <html> by next-themes). All colors flow through the semantic   */
+/* tokens below; components never hardcode palette values. Tailwind v4       */
+/* CSS-first config — there is no tailwind.config file.                       */
 /*----------------------------------------------------------------------------*/
 
 @import "tailwindcss";
 
 /*----------------------------------------------------------------------------*/
-/* DESIGN TOKENS                                                              */
+/* DARK VARIANT — class strategy for the user-controlled theme toggle         */
+/*----------------------------------------------------------------------------*/
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*----------------------------------------------------------------------------*/
+/* DESIGN TOKENS — LIGHT (default)                                            */
 /*----------------------------------------------------------------------------*/
 :root {
+  color-scheme: light;
+  --background: #fafafa;
+  --foreground: #111113;
+  --muted: #52525b;
+  --surface: #ffffff;
+  --surface-2: #f1f1f3;
+  --border: #e4e4e7;
+  --grid-line: rgb(0 0 0 / 0.06);
+  --flame: #f97316;
+  --ember: #f59e0b;
+}
+
+/*----------------------------------------------------------------------------*/
+/* DESIGN TOKENS — DARK                                                       */
+/*----------------------------------------------------------------------------*/
+.dark {
+  color-scheme: dark;
   --background: #0a0a0a;
   --foreground: #ededed;
   --muted: #a1a1aa;
-  --surface: #141416;
+  --surface: #111112;
+  --surface-2: #1a1a1d;
+  --border: rgb(255 255 255 / 0.1);
+  --grid-line: rgb(255 255 255 / 0.05);
   --flame: #f97316;
   --ember: #fbbf24;
 }
@@ -28,6 +54,8 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
   --color-flame: var(--flame);
   --color-ember: var(--ember);
   --font-sans: var(--font-geist-sans);
@@ -75,11 +103,11 @@
 /*----------------------------------------------------------------------------*/
 /* CUSTOM UTILITIES                                                           */
 /*----------------------------------------------------------------------------*/
-/* Faint blueprint grid used behind the hero. */
+/* Faint blueprint grid used behind hero sections (line color is themed). */
 @utility bg-grid {
   background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
@@ -106,13 +134,12 @@
 /* BASE STYLES                                                                */
 /*----------------------------------------------------------------------------*/
 html {
-  color-scheme: dark;
   scroll-behavior: smooth;
 }
 
 ::selection {
   background: var(--flame);
-  color: var(--background);
+  color: #ffffff;
 }
 
 :focus-visible {

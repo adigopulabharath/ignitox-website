@@ -24,14 +24,17 @@ export const SITE = {
 //------------------------------------------------------------------------------
 export type NavLink = { label: string; href: string };
 
+// Direct links — the Services mega menu is composed separately in the header
+// from src/content/services.ts.
 export const MAIN_NAV: NavLink[] = [
-  { label: "Services", href: "/#services" },
+  { label: "Insights", href: "/insights" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
 export const COMPANY_NAV: NavLink[] = [
   { label: "About", href: "/about" },
+  { label: "Insights", href: "/insights" },
   { label: "Contact", href: "/contact" },
 ];
 

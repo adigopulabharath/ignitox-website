@@ -8,6 +8,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { Reveal } from "@/components/motion/reveal";
 import { CtaBanner } from "@/components/sections/cta-banner";
 import {
@@ -65,7 +66,7 @@ export default function AboutPage() {
       {/*----------------------------------------------------------------------
         ABOUT HERO
       ----------------------------------------------------------------------*/}
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-border">
         <div
           aria-hidden="true"
           className="absolute left-1/2 top-[-260px] h-[420px] w-[680px] -translate-x-1/2 rounded-full bg-flame/10 blur-[140px]"
@@ -102,17 +103,19 @@ export default function AboutPage() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
           {VALUES.map((value, index) => (
             <Reveal key={value.title} delay={index * 0.06} className="h-full">
-              <div className="h-full rounded-2xl border border-white/10 bg-white/[0.02] p-8">
-                <span className="inline-flex size-11 items-center justify-center rounded-xl border border-flame/30 bg-gradient-to-br from-flame/20 to-ember/10 text-flame">
-                  <value.icon className="size-5" />
-                </span>
-                <h3 className="mt-5 text-lg font-semibold tracking-tight text-foreground">
-                  {value.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {value.description}
-                </p>
-              </div>
+              <SpotlightCard className="h-full rounded-2xl border border-border bg-surface transition-colors hover:border-flame/40">
+                <div className="p-8">
+                  <span className="inline-flex size-11 items-center justify-center rounded-xl border border-flame/30 bg-gradient-to-br from-flame/20 to-ember/10 text-flame transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                    <value.icon className="size-5" />
+                  </span>
+                  <h3 className="mt-5 text-lg font-semibold tracking-tight text-foreground">
+                    {value.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    {value.description}
+                  </p>
+                </div>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>

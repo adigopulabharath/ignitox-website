@@ -1,8 +1,9 @@
 //==============================================================================
 // PAGE: SERVICE DETAIL (/services/[slug])
 //==============================================================================
-// One template for every service, driven by src/content/services.ts. All
-// slugs are statically generated at build time.
+// One template, fully driven by src/content/services.ts: hero, feature grid,
+// deliverables, FAQ (native <details> — works without JavaScript), related
+// services and CTA. All slugs statically generated at build time.
 //------------------------------------------------------------------------------
 
 import type { Metadata } from "next";
@@ -11,11 +12,13 @@ import { getService, SERVICES } from "@/content/services";
 import { SITE } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { ButtonLink } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
+import { ServiceCard } from "@/components/sections/services-grid";
 import { CtaBanner } from "@/components/sections/cta-banner";
 import { JsonLd } from "@/components/json-ld";
-import { SERVICE_ICONS } from "@/components/icons";
+import { CheckIcon, ChevronDownIcon, SERVICE_ICONS } from "@/components/icons";
 
 //------------------------------------------------------------------------------
 // STATIC GENERATION & METADATA
@@ -53,9 +56,10 @@ export default async function ServicePage({
   if (!service) notFound();
 
   const IconComponent = SERVICE_ICONS[service.icon];
+  const relatedServices = SERVICES.filter((entry) => entry.slug !== service.slug);
 
   //----------------------------------------------------------------------------
-  // STRUCTURED DATA (Service + Breadcrumb)
+  // STRUCTURED DATA (Service + Breadcrumb + FAQ)
   //----------------------------------------------------------------------------
   const serviceJsonLd = {
     "@context": "https://schema.org",
@@ -71,24 +75,36 @@ export default async function ServicePage({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE.url}/services` },
       {
         "@type": "ListItem",
-        position: 2,
+        position: 3,
         name: service.name,
         item: `${SITE.url}/services/${service.slug}`,
       },
     ],
   };
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: service.faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <>
       <JsonLd data={serviceJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={faqJsonLd} />
 
       {/*----------------------------------------------------------------------
         SERVICE HERO
       ----------------------------------------------------------------------*/}
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-border">
         <div
           aria-hidden="true"
           className="absolute left-1/2 top-[-260px] h-[420px] w-[680px] -translate-x-1/2 rounded-full bg-flame/10 blur-[140px]"
@@ -96,7 +112,7 @@ export default async function ServicePage({
         <Container className="relative pb-16 pt-20 md:pb-20 md:pt-28">
           <p className="animate-fade-up inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-[0.2em] text-flame">
             <IconComponent className="size-4" />
-            Services
+            Services / {service.name}
           </p>
           <h1 className="animate-fade-up mt-4 max-w-3xl text-4xl font-semibold tracking-tighter text-foreground [animation-delay:100ms] md:text-6xl">
             {service.tagline}
@@ -108,7 +124,7 @@ export default async function ServicePage({
             <ButtonLink href="/contact" size="lg">
               Discuss your project
             </ButtonLink>
-            <ButtonLink href="/#services" variant="secondary" size="lg">
+            <ButtonLink href="/services" variant="secondary" size="lg">
               All services
             </ButtonLink>
           </div>
@@ -129,14 +145,16 @@ export default async function ServicePage({
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {service.features.map((feature, index) => (
             <Reveal key={feature.title} delay={index * 0.05} className="h-full">
-              <div className="h-full rounded-2xl border border-white/10 bg-white/[0.02] p-6">
-                <h3 className="text-base font-semibold tracking-tight text-foreground">
-                  {feature.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {feature.description}
-                </p>
-              </div>
+              <SpotlightCard className="h-full rounded-2xl border border-border bg-surface">
+                <div className="p-6">
+                  <h3 className="text-base font-semibold tracking-tight text-foreground">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    {feature.description}
+                  </p>
+                </div>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>
@@ -152,13 +170,74 @@ export default async function ServicePage({
             {service.technologies.map((tech) => (
               <span
                 key={tech}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs text-muted"
+                className="rounded-full border border-border bg-surface-2 px-3 py-1 font-mono text-xs text-muted"
               >
                 {tech}
               </span>
             ))}
           </div>
         </Reveal>
+      </Section>
+
+      {/*----------------------------------------------------------------------
+        DELIVERABLES & FAQ
+      ----------------------------------------------------------------------*/}
+      <Section className="pt-0">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+          {/* What you get */}
+          <Reveal>
+            <div>
+              <SectionHeading eyebrow="Deliverables" title="What you get" />
+              <ul className="mt-8 space-y-4">
+                {service.deliverables.map((deliverable) => (
+                  <li key={deliverable} className="flex items-start gap-3 text-sm text-muted">
+                    <CheckIcon className="mt-0.5 size-4 shrink-0 text-flame" />
+                    {deliverable}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+
+          {/* FAQ — native disclosure, zero JavaScript required */}
+          <Reveal delay={0.08}>
+            <div>
+              <SectionHeading eyebrow="FAQ" title="Common questions" />
+              <div className="mt-8 space-y-3">
+                {service.faqs.map((faq) => (
+                  <details
+                    key={faq.question}
+                    className="group rounded-xl border border-border bg-surface open:border-flame/40"
+                  >
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-sm font-medium text-foreground [&::-webkit-details-marker]:hidden">
+                      {faq.question}
+                      <ChevronDownIcon className="size-4 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" />
+                    </summary>
+                    <p className="px-5 pb-5 text-sm leading-relaxed text-muted">
+                      {faq.answer}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </Section>
+
+      {/*----------------------------------------------------------------------
+        RELATED SERVICES
+      ----------------------------------------------------------------------*/}
+      <Section className="pt-0">
+        <Reveal>
+          <SectionHeading eyebrow="Explore more" title="Other ways we can help" />
+        </Reveal>
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          {relatedServices.map((related, index) => (
+            <Reveal key={related.slug} delay={index * 0.06} className="h-full">
+              <ServiceCard service={related} />
+            </Reveal>
+          ))}
+        </div>
       </Section>
 
       <CtaBanner />

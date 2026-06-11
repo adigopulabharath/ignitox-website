@@ -12,7 +12,7 @@ export function CtaBanner() {
   return (
     <Section>
       <Reveal>
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 px-8 py-16 text-center md:py-20">
+        <div className="relative overflow-hidden rounded-3xl border border-border px-8 py-16 text-center md:py-20">
           {/* Glow backdrop */}
           <div
             aria-hidden="true"

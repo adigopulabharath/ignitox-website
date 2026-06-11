@@ -14,6 +14,7 @@ import type { ServiceIconName } from "@/components/icons";
 // TYPES
 //------------------------------------------------------------------------------
 export type ServiceFeature = { title: string; description: string };
+export type ServiceFaq = { question: string; answer: string };
 
 export type Service = {
   slug: string;
@@ -23,6 +24,9 @@ export type Service = {
   icon: ServiceIconName;
   features: ServiceFeature[];
   technologies: string[];
+  /** Concrete artifacts every engagement hands over. */
+  deliverables: string[];
+  faqs: ServiceFaq[];
 };
 
 //------------------------------------------------------------------------------
@@ -72,6 +76,30 @@ export const SERVICES: Service[] = [
       },
     ],
     technologies: ["AWS", "Azure", "Google Cloud", "Terraform", "Kubernetes", "Docker"],
+    deliverables: [
+      "Architecture diagrams & decision records",
+      "Infrastructure-as-Code repository (Terraform)",
+      "Migration runbook with rehearsed rollback",
+      "Cost dashboard & monthly FinOps report",
+      "On-call runbooks & monitoring setup",
+    ],
+    faqs: [
+      {
+        question: "How long does a typical cloud migration take?",
+        answer:
+          "Most small-to-mid migrations land in 2–8 weeks. We start with a one-week assessment that produces a fixed plan, timeline and budget — so you know the answer for your workload before committing.",
+      },
+      {
+        question: "Which cloud should we choose — AWS, Azure or GCP?",
+        answer:
+          "We're vendor-neutral and certified across all three. The honest answer depends on your existing tooling, team skills, regional needs and pricing — the assessment ends with a recommendation and the numbers behind it.",
+      },
+      {
+        question: "Can you work alongside our in-house team?",
+        answer:
+          "Yes — that's our favourite setup. We pair with your engineers, document everything as we go, and hand over ownership so you're never locked into us.",
+      },
+    ],
   },
 
   //--------------------------------------------------------------------------
@@ -117,6 +145,30 @@ export const SERVICES: Service[] = [
       },
     ],
     technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Node.js", "PostgreSQL"],
+    deliverables: [
+      "Full source code ownership in your repository",
+      "Design system & reusable component library",
+      "CI/CD pipeline with automated quality gates",
+      "Analytics, SEO & Search Console setup",
+      "Handover session & editing documentation",
+    ],
+    faqs: [
+      {
+        question: "How much does a website or web app cost?",
+        answer:
+          "After a short discovery call we quote a fixed price per scope — no hourly surprises. Marketing sites and complex web applications are very different animals, so we'd rather give you a real number than a misleading range.",
+      },
+      {
+        question: "Can you rebuild or improve our existing site?",
+        answer:
+          "Absolutely. We audit what you have first — sometimes a performance and SEO overhaul beats a rebuild, and we'll tell you honestly which one you need.",
+      },
+      {
+        question: "Will we be able to edit content ourselves?",
+        answer:
+          "Yes. Depending on your needs we wire up a headless CMS or a simple structured-content workflow, and train your team during handover.",
+      },
+    ],
   },
 
   //--------------------------------------------------------------------------
@@ -162,6 +214,30 @@ export const SERVICES: Service[] = [
       },
     ],
     technologies: ["Linux", "Docker", "nginx", "Cloudflare", "Hetzner Cloud", "Let's Encrypt"],
+    deliverables: [
+      "99.9% uptime target with monitoring & alerting",
+      "Automated daily backups with restore drills",
+      "TLS, CDN and security headers configured",
+      "Staging environment for safe releases",
+      "Monthly health & performance report",
+    ],
+    faqs: [
+      {
+        question: "What does “managed” actually include?",
+        answer:
+          "Everything below your application code: provisioning, OS patching, TLS, backups, monitoring, incident response and capacity planning. You ship your site; we keep it online.",
+      },
+      {
+        question: "Where is our site hosted?",
+        answer:
+          "On EU data centers by default (GDPR-friendly), with a global CDN in front so visitors everywhere get fast loads. Other regions are available on request.",
+      },
+      {
+        question: "What happens if we outgrow our plan?",
+        answer:
+          "We scale you up with zero-downtime migrations — that's the point of managed hosting. You'll get a heads-up with options before limits ever bite.",
+      },
+    ],
   },
 
   //--------------------------------------------------------------------------
@@ -207,6 +283,30 @@ export const SERVICES: Service[] = [
       },
     ],
     technologies: ["GitHub Actions", "Kubernetes", "Terraform", "Prometheus", "Grafana"],
+    deliverables: [
+      "Audit report with prioritized fix list",
+      "CI/CD pipeline templates your team owns",
+      "Observability dashboards & alert rules",
+      "Architecture & process documentation",
+      "Pairing sessions to transfer the knowledge",
+    ],
+    faqs: [
+      {
+        question: "Do you do one-off audits or only retainers?",
+        answer:
+          "Both. A one-off security or DevOps audit is a great low-risk way to start — many clients then keep a small monthly retainer for ongoing guidance.",
+      },
+      {
+        question: "Do you work remotely or on-site?",
+        answer:
+          "Remote-first with full overlap on your core hours. On-site workshops can be arranged for kick-offs and team enablement weeks.",
+      },
+      {
+        question: "Which tools do you standardize on?",
+        answer:
+          "Boring, proven ones: GitHub Actions, Terraform, Docker, Kubernetes where it's justified, Prometheus/Grafana for observability. We adapt to your stack rather than forcing ours.",
+      },
+    ],
   },
 ];
 

@@ -6,6 +6,7 @@
 
 import { PROCESS_STEPS } from "@/content/site";
 import { Section, SectionHeading } from "@/components/ui/section";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { Reveal } from "@/components/motion/reveal";
 
 export function Process() {
@@ -22,15 +23,17 @@ export function Process() {
       <div className="mt-14 grid gap-6 md:grid-cols-3">
         {PROCESS_STEPS.map((step, index) => (
           <Reveal key={step.number} delay={index * 0.08}>
-            <div className="h-full rounded-2xl border border-white/10 bg-white/[0.02] p-8">
-              <p className="font-mono text-sm text-flame">{step.number}</p>
-              <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
-                {step.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {step.description}
-              </p>
-            </div>
+            <SpotlightCard className="h-full rounded-2xl border border-border bg-surface">
+              <div className="p-8">
+                <p className="font-mono text-sm text-flame">{step.number}</p>
+                <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {step.description}
+                </p>
+              </div>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>

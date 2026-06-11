@@ -14,7 +14,7 @@ export function Stats() {
   return (
     <Section className="py-10 md:py-14">
       <Reveal>
-        <dl className="grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
           {STATS.map((stat) => (
             <div key={stat.label} className="bg-background p-8 text-center">
               <dd className="text-4xl font-semibold tracking-tight text-foreground">

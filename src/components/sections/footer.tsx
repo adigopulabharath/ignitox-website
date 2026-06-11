@@ -43,7 +43,7 @@ function LinkGroup({ heading, links }: LinkGroupProps) {
 //------------------------------------------------------------------------------
 export function Footer() {
   return (
-    <footer className="border-t border-white/10">
+    <footer className="border-t border-border">
       <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
           {/* Brand */}
@@ -75,7 +75,7 @@ export function Footer() {
         {/*--------------------------------------------------------------------
           BOTTOM BAR
         --------------------------------------------------------------------*/}
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-8 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-border pt-8 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {SITE.name}. All rights reserved.
           </p>

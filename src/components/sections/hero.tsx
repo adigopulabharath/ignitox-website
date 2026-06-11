@@ -33,7 +33,7 @@ export function Hero() {
       ----------------------------------------------------------------------*/}
       <Container className="relative pb-24 pt-24 text-center md:pb-32 md:pt-36">
         {/* Eyebrow badge */}
-        <p className="animate-fade-up mx-auto inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs text-muted">
+        <p className="animate-fade-up mx-auto inline-flex items-center gap-2.5 rounded-full border border-border bg-surface-2 px-4 py-1.5 text-xs text-muted">
           <span aria-hidden="true" className="size-1.5 animate-pulse rounded-full bg-flame" />
           Cloud · Hosting · Web Development
         </p>

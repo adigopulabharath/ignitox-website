@@ -18,9 +18,9 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-foreground text-background hover:bg-white",
+  primary: "bg-foreground text-background hover:bg-foreground/85",
   secondary:
-    "border border-white/15 text-foreground hover:border-white/40 hover:bg-white/5",
+    "border border-border text-foreground hover:border-foreground/30 hover:bg-surface-2",
 };
 
 const sizes: Record<Size, string> = {

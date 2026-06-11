@@ -71,7 +71,7 @@ export default function ContactPage() {
           <dl className="animate-fade-up mt-10 space-y-6 [animation-delay:300ms]">
             {DETAILS.map((detail) => (
               <div key={detail.label} className="flex items-start gap-4">
-                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-flame">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 text-flame">
                   <detail.icon className="size-5" />
                 </span>
                 <div>

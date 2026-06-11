@@ -15,8 +15,13 @@ roadmap. Conventions live in [AGENTS.md](./AGENTS.md).
 ## Stack
 
 Next.js 16 (App Router, standalone output) · React 19 · TypeScript ·
-Tailwind CSS v4 · Motion · Zod · OpenAPI 3.1 (schema-first API) · Docker +
-nginx · GitHub Actions → GHCR → Hetzner · Cloudflare free tier in front.
+Tailwind CSS v4 · Motion · next-themes (light/dark) · Zod · OpenAPI 3.1
+(schema-first API) · Docker + nginx · GitHub Actions → GHCR → Hetzner ·
+Cloudflare free tier in front.
+
+Everything is content-driven: services and Insights posts live in
+`src/content/` — adding an entry there generates the page and updates the
+nav, mega menu, footer and sitemap automatically.
 
 ## Quick start
 
