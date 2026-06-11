@@ -19,6 +19,7 @@ import { Logo } from "@/components/logo";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { CommandSearch } from "@/components/search/command-palette";
 import {
   ArrowRightIcon,
   ChevronDownIcon,
@@ -111,7 +112,8 @@ export function Header() {
         {/*--------------------------------------------------------------------
           ACTIONS — theme toggle (all sizes), CTA (desktop), burger (mobile)
         --------------------------------------------------------------------*/}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          <CommandSearch />
           <ThemeToggle />
           <div className="hidden md:block">
             <ButtonLink href="/contact" size="sm">
@@ -187,7 +189,7 @@ export function Header() {
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   Not sure where to start? Get a free 30-minute architecture
-                  review with a senior engineer — no sales script.
+                  review with a senior engineer. No sales script.
                 </p>
                 <Link
                   href="/contact"

@@ -80,7 +80,7 @@ export function ContactForm() {
     } catch {
       setStatus({
         state: "error",
-        message: "Network error — please check your connection and try again.",
+        message: "Network error. Please check your connection and try again.",
       });
     }
   }

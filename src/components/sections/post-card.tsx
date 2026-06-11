@@ -53,8 +53,9 @@ export function PostCard({ post, featured = false }: PostCardProps) {
 
           {/* Meta row */}
           <div className="mt-auto flex items-center justify-between pt-6 text-xs text-muted">
-            <span className="font-mono">
-              {formatPostDate(post.date)} · {post.readMinutes} min read
+            <span className="flex gap-3 font-mono">
+              <span>{formatPostDate(post.date)}</span>
+              <span>{post.readMinutes} min read</span>
             </span>
             <ArrowUpRightIcon className="size-4 text-flame transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </div>

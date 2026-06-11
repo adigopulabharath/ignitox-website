@@ -19,7 +19,7 @@ import { CtaBanner } from "@/components/sections/cta-banner";
 export const metadata: Metadata = {
   title: "Insights",
   description:
-    "Practical engineering insights from the Ignitox team — cloud, hosting, performance and the craft of running production systems.",
+    "Practical engineering insights from the Ignitox team on cloud, hosting, performance and the craft of running production systems.",
 };
 
 //------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ export default function InsightsPage() {
             Notes from the <span className="text-gradient">engine room</span>
           </h1>
           <p className="animate-fade-up mt-5 max-w-2xl text-base text-muted [animation-delay:200ms] md:text-lg">
-            Practical write-ups on cloud, hosting and web performance — the
+            Practical write-ups on cloud, hosting and web performance. The
             things we learn keeping production systems fast and online.
           </p>
         </Container>

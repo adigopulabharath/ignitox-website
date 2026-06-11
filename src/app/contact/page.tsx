@@ -16,7 +16,7 @@ import { ClockIcon, MailIcon, MapPinIcon } from "@/components/icons";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Tell us about your project — cloud, hosting or web development. We reply within one business day.",
+    "Tell us about your project, whether it's cloud, hosting or web development. We reply within one business day.",
 };
 
 //------------------------------------------------------------------------------
@@ -63,9 +63,9 @@ export default function ContactPage() {
             Let&apos;s build something
           </h1>
           <p className="animate-fade-up mt-5 max-w-md text-base text-muted [animation-delay:200ms]">
-            Tell us about your project — cloud migration, a new website,
+            Tell us about your project. A cloud migration, a new website,
             hosting that just works, or something you can&apos;t quite name
-            yet. A senior engineer (not a sales script) will get back to you.
+            yet. A senior engineer, not a sales script, will get back to you.
           </p>
 
           <dl className="animate-fade-up mt-10 space-y-6 [animation-delay:300ms]">

@@ -37,7 +37,7 @@ const SECTIONS: Array<{ heading: string; paragraphs: string[] }> = [
   {
     heading: "Content & intellectual property",
     paragraphs: [
-      `All content on this site — text, design, graphics and code — belongs to ${SITE.name} or its licensors and may not be reproduced without permission. Third-party product names and logos are trademarks of their respective owners and are used for identification only.`,
+      `All content on this site, including text, design, graphics and code, belongs to ${SITE.name} or its licensors and may not be reproduced without permission. Third-party product names and logos are trademarks of their respective owners and are used for identification only.`,
     ],
   },
   {

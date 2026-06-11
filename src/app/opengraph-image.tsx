@@ -10,7 +10,7 @@ import { SITE } from "@/content/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `${SITE.name} — ${SITE.tagline}`;
+export const alt = `${SITE.name}: ${SITE.tagline}`;
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -50,7 +50,7 @@ export default function OpenGraphImage() {
 
         {/* Footer line */}
         <div style={{ marginTop: "64px", fontSize: "26px", color: "#71717a" }}>
-          Cloud · Hosting · Web Development
+          Cloud, Hosting and Web Development
         </div>
       </div>
     ),

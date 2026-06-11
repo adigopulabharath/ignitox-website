@@ -9,6 +9,7 @@ import { COMPANY_NAV, LEGAL_NAV, SITE } from "@/content/site";
 import { SERVICES } from "@/content/services";
 import { Logo } from "@/components/logo";
 import { Container } from "@/components/ui/container";
+import { NewsletterForm } from "@/components/sections/newsletter-form";
 
 //------------------------------------------------------------------------------
 // LINK GROUP
@@ -45,7 +46,23 @@ export function Footer() {
   return (
     <footer className="border-t border-border">
       <Container className="py-16">
-        <div className="grid gap-12 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
+        {/*--------------------------------------------------------------------
+          NEWSLETTER ROW
+        --------------------------------------------------------------------*/}
+        <div className="flex flex-col gap-6 border-b border-border pb-12 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-foreground">
+              The Ignitox newsletter
+            </h2>
+            <p className="mt-1 text-sm text-muted">
+              One practical engineering email a month. No fluff, unsubscribe
+              anytime.
+            </p>
+          </div>
+          <NewsletterForm />
+        </div>
+
+        <div className="mt-12 grid gap-12 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
           {/* Brand */}
           <div>
             <Link href="/" aria-label="Ignitox home" className="inline-block">
@@ -79,7 +96,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {SITE.name}. All rights reserved.
           </p>
-          <p className="font-mono">Built on our own stack — Next.js · Docker · Hetzner</p>
+          <p className="font-mono">Built with Next.js, Docker and Hetzner</p>
         </div>
       </Container>
     </footer>

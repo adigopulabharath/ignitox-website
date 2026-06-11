@@ -35,7 +35,7 @@ export function Hero() {
         {/* Eyebrow badge */}
         <p className="animate-fade-up mx-auto inline-flex items-center gap-2.5 rounded-full border border-border bg-surface-2 px-4 py-1.5 text-xs text-muted">
           <span aria-hidden="true" className="size-1.5 animate-pulse rounded-full bg-flame" />
-          Cloud · Hosting · Web Development
+          Cloud, Hosting and Web Development
         </p>
 
         {/* Headline */}
@@ -46,9 +46,9 @@ export function Hero() {
 
         {/* Subcopy */}
         <p className="animate-fade-up mx-auto mt-6 max-w-2xl text-base text-muted [animation-delay:240ms] md:text-lg">
-          We design, build and run your digital infrastructure — cloud
-          architecture on AWS, Azure & GCP, managed hosting, and web
-          experiences your customers will love.
+          We design, build and run your digital infrastructure: cloud
+          architecture on AWS, Azure and Google Cloud, managed hosting, and
+          web experiences your customers will love.
         </p>
 
         {/* Calls to action */}

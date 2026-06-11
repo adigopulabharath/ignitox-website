@@ -35,7 +35,7 @@ const VALUES = [
     icon: FlameOutlineIcon,
     title: "Ownership",
     description:
-      "We run your systems like they're ours — when something breaks at 3 a.m., it's our pager that goes off.",
+      "We run your systems like they're ours. When something breaks at 3 a.m., it's our pager that goes off.",
   },
   {
     icon: EyeIcon,
@@ -83,9 +83,9 @@ export default function AboutPage() {
           <p className="animate-fade-up mt-6 max-w-2xl text-base text-muted [animation-delay:200ms] md:text-lg">
             Ignitox was founded by engineers who were tired of watching
             businesses overpay for slow websites and fragile infrastructure.
-            Today we design, build and operate cloud platforms, hosting and web
-            experiences for companies that want technology to be a strength —
-            not a worry.
+            Today we design, build and operate cloud platforms, hosting and
+            web experiences for companies that want technology to be a
+            strength, not a worry.
           </p>
         </Container>
       </section>

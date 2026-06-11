@@ -15,7 +15,7 @@ export const SITE = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ignitox.com",
   tagline: "IT solutions that ignite your business",
   description:
-    "Ignitox delivers cloud solutions on AWS, Azure & GCP, managed website hosting, and high-performance web development — one accountable partner from first deploy to day-2 operations.",
+    "Ignitox builds and runs cloud platforms on AWS, Azure and Google Cloud, managed website hosting, and high-performance websites. One accountable partner from first deploy to day-2 operations.",
   email: "hello@ignitox.com", // PLACEHOLDER — point at the real inbox before launch
 } as const;
 
@@ -27,6 +27,7 @@ export type NavLink = { label: string; href: string };
 // Direct links — the Services mega menu is composed separately in the header
 // from src/content/services.ts.
 export const MAIN_NAV: NavLink[] = [
+  { label: "Case Studies", href: "/case-studies" },
   { label: "Insights", href: "/insights" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -34,6 +35,7 @@ export const MAIN_NAV: NavLink[] = [
 
 export const COMPANY_NAV: NavLink[] = [
   { label: "About", href: "/about" },
+  { label: "Case Studies", href: "/case-studies" },
   { label: "Insights", href: "/insights" },
   { label: "Contact", href: "/contact" },
 ];
@@ -78,13 +80,13 @@ export const PROCESS_STEPS: ProcessStep[] = [
     number: "02",
     title: "Design & build",
     description:
-      "Senior engineers design the architecture and build in short, reviewable iterations — you see working software every week.",
+      "Senior engineers design the architecture and build in short, reviewable iterations, so you see working software every week.",
   },
   {
     number: "03",
     title: "Launch & manage",
     description:
-      "We ship to production with monitoring, backups and runbooks in place — then keep it fast, patched and online, 24/7.",
+      "We ship to production with monitoring, backups and runbooks in place, then we keep everything fast, patched and online around the clock.",
   },
 ];
 

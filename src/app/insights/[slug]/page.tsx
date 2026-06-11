@@ -161,9 +161,8 @@ export default async function InsightArticlePage({
           <div className="animate-fade-up mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted [animation-delay:200ms]">
             <span className="font-medium text-foreground">{post.author.name}</span>
             <span>{post.author.role}</span>
-            <span className="font-mono">
-              {formatPostDate(post.date)} · {post.readMinutes} min read
-            </span>
+            <span className="font-mono">{formatPostDate(post.date)}</span>
+            <span className="font-mono">{post.readMinutes} min read</span>
             <span className="flex gap-2">
               {post.tags.map((tag) => (
                 <span

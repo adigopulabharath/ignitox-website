@@ -1,0 +1,9 @@
+#==============================================================================
+# SECURITY.TXT (RFC 9116)
+#==============================================================================
+# How security researchers can reach us. Update Expires yearly.
+
+Contact: mailto:hello@ignitox.com
+Expires: 2027-06-30T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://ignitox.com/.well-known/security.txt

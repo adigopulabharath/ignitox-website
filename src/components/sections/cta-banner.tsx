@@ -25,8 +25,8 @@ export function CtaBanner() {
               project?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-muted md:text-lg">
-              Tell us where you&apos;re headed — we&apos;ll map the fastest,
-              safest route to production.
+              Tell us where you&apos;re headed and we&apos;ll map the
+              fastest, safest route to production.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
               <ButtonLink href="/contact" size="lg">

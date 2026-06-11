@@ -39,7 +39,7 @@ export async function generateMetadata({
   return {
     title: service.name,
     description: service.summary,
-    openGraph: { title: `${service.name} · ${SITE.name}`, description: service.summary },
+    openGraph: { title: `${service.name} | ${SITE.name}`, description: service.summary },
   };
 }
 
@@ -139,7 +139,7 @@ export default async function ServicePage({
           <SectionHeading
             eyebrow={service.name}
             title="What's included"
-            lead="Every engagement is scoped to your needs — these are the capabilities we bring to the table."
+            lead="Every engagement is scoped to your needs. These are the capabilities we bring to the table."
           />
         </Reveal>
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

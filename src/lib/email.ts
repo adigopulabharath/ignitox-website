@@ -58,7 +58,7 @@ export async function sendContactEmail(data: ContactRequest): Promise<void> {
       from,
       to: [to],
       reply_to: data.email,
-      subject: `New inquiry — ${data.name} (${serviceLabel})`,
+      subject: `New inquiry from ${data.name} (${serviceLabel})`,
       text,
     }),
     signal: AbortSignal.timeout(SEND_TIMEOUT_MS),

@@ -15,7 +15,7 @@ export function Process() {
       <Reveal>
         <SectionHeading
           eyebrow="How we work"
-          title="From first call to launch — without the chaos"
+          title="From first call to launch, without the chaos"
           lead="A predictable process with senior engineers at every step. No hand-offs to a B-team after the contract is signed."
         />
       </Reveal>

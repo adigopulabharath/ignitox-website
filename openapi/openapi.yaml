@@ -15,7 +15,7 @@ openapi: 3.1.0
 #------------------------------------------------------------------------------
 info:
   title: Ignitox Website API
-  version: 1.0.0
+  version: 1.1.0
   description: >-
     Public API behind the Ignitox marketing site. All endpoints are
     intentionally unauthenticated but protected against abuse with Cloudflare
@@ -36,6 +36,8 @@ servers:
 tags:
   - name: contact
     description: Lead-generation endpoints for the public website.
+  - name: newsletter
+    description: Newsletter subscription endpoints.
 
 #------------------------------------------------------------------------------
 # PATHS
@@ -101,6 +103,60 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiError"
 
+  /api/newsletter:
+    post:
+      operationId: subscribeNewsletter
+      tags: [newsletter]
+      summary: Subscribe to the newsletter
+      description: >-
+        Adds an email address to the Ignitox newsletter audience. Protected by
+        a honeypot field, per-IP rate limiting and strict validation (no
+        Turnstile, to keep footer signup friction low). Returns 202 because
+        the subscription is processed asynchronously from the visitor's
+        perspective.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsletterRequest"
+      responses:
+        "202":
+          description: Subscription accepted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsletterAccepted"
+        "400":
+          description: Malformed JSON or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "413":
+          description: Request body exceeds the size limit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "429":
+          description: Rate limit exceeded for this client.
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
 #------------------------------------------------------------------------------
 # COMPONENTS
 #------------------------------------------------------------------------------
@@ -145,7 +201,7 @@ components:
           type: string
           maxLength: 0
           description: >-
-            Honeypot — hidden from humans by the UI and must be empty.
+            Honeypot, hidden from humans by the UI and must be empty.
             Submissions with a value are silently discarded.
         turnstileToken:
           type: string
@@ -153,6 +209,40 @@ components:
           description: >-
             Cloudflare Turnstile response token. Required whenever Turnstile
             is configured on the server.
+
+    #--------------------------------------------------------------------------
+    # NEWSLETTER REQUEST
+    #--------------------------------------------------------------------------
+    NewsletterRequest:
+      type: object
+      additionalProperties: false
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: Address to subscribe.
+        companyWebsite:
+          type: string
+          maxLength: 0
+          description: >-
+            Honeypot, hidden from humans by the UI and must be empty.
+            Submissions with a value are silently discarded.
+
+    #--------------------------------------------------------------------------
+    # NEWSLETTER SUCCESS RESPONSE
+    #--------------------------------------------------------------------------
+    NewsletterAccepted:
+      type: object
+      additionalProperties: false
+      required: [ok, message]
+      properties:
+        ok:
+          const: true
+        message:
+          type: string
+          description: Human-readable confirmation shown to the visitor.
 
     #--------------------------------------------------------------------------
     # SUCCESS RESPONSE

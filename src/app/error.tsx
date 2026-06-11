@@ -32,7 +32,7 @@ export default function GlobalError({
         Something went wrong
       </h1>
       <p className="mt-4 max-w-md text-base text-muted">
-        An unexpected error occurred. It has been logged — please try again.
+        An unexpected error occurred. It has been logged. Please try again.
       </p>
       <Button size="lg" className="mt-8" onClick={() => reset()}>
         Try again

@@ -24,6 +24,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/newsletter": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Subscribe to the newsletter
+         * @description Adds an email address to the Ignitox newsletter audience. Protected by a honeypot field, per-IP rate limiting and strict validation (no Turnstile, to keep footer signup friction low). Returns 202 because the subscription is processed asynchronously from the visitor's perspective.
+         */
+        post: operations["subscribeNewsletter"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -43,10 +63,25 @@ export interface components {
             service: "cloud-solutions" | "web-development" | "website-hosting" | "it-consulting" | "general";
             /** @description Project details / inquiry body. */
             message: string;
-            /** @description Honeypot — hidden from humans by the UI and must be empty. Submissions with a value are silently discarded. */
+            /** @description Honeypot, hidden from humans by the UI and must be empty. Submissions with a value are silently discarded. */
             companyWebsite?: string;
             /** @description Cloudflare Turnstile response token. Required whenever Turnstile is configured on the server. */
             turnstileToken?: string;
+        };
+        NewsletterRequest: {
+            /**
+             * Format: email
+             * @description Address to subscribe.
+             */
+            email: string;
+            /** @description Honeypot, hidden from humans by the UI and must be empty. Submissions with a value are silently discarded. */
+            companyWebsite?: string;
+        };
+        NewsletterAccepted: {
+            /** @constant */
+            ok: true;
+            /** @description Human-readable confirmation shown to the visitor. */
+            message: string;
         };
         ContactAccepted: {
             /** @constant */
@@ -140,6 +175,68 @@ export interface operations {
                 };
             };
             /** @description Unexpected server error (e.g. email delivery failure). */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    subscribeNewsletter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NewsletterRequest"];
+            };
+        };
+        responses: {
+            /** @description Subscription accepted. */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NewsletterAccepted"];
+                };
+            };
+            /** @description Malformed JSON or failed validation. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Request body exceeds the size limit. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Rate limit exceeded for this client. */
+            429: {
+                headers: {
+                    /** @description Seconds to wait before retrying. */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description Unexpected server error. */
             500: {
                 headers: {
                     [name: string]: unknown;

@@ -1,12 +1,14 @@
 //==============================================================================
 // TECHNOLOGY MARQUEE
 //==============================================================================
-// Infinite horizontal scroll of the platforms we build on. Pure CSS animation
-// (disabled under prefers-reduced-motion); the list is duplicated once with
-// aria-hidden so the loop is seamless without confusing screen readers.
+// Infinite horizontal scroll of the platforms we build on, each with its real
+// brand mark. Pure CSS animation (disabled under prefers-reduced-motion); the
+// list is duplicated once with aria-hidden so the loop is seamless without
+// confusing screen readers.
 //------------------------------------------------------------------------------
 
 import { TECH_MARQUEE } from "@/content/site";
+import { BrandIcon } from "@/components/brand-icons";
 
 //------------------------------------------------------------------------------
 // MARQUEE ROW
@@ -15,13 +17,14 @@ function MarqueeRow({ hidden = false }: { hidden?: boolean }) {
   return (
     <ul
       aria-hidden={hidden || undefined}
-      className="flex shrink-0 items-center gap-12 pr-12"
+      className="flex shrink-0 items-center gap-10 pr-10"
     >
       {TECH_MARQUEE.map((tech) => (
         <li
           key={tech}
-          className="whitespace-nowrap font-mono text-sm text-muted/80"
+          className="flex items-center gap-2.5 whitespace-nowrap font-mono text-sm text-muted/80"
         >
+          <BrandIcon name={tech} className="size-5 shrink-0" />
           {tech}
         </li>
       ))}

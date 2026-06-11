@@ -9,7 +9,9 @@ import { Hero } from "@/components/sections/hero";
 import { LogoMarquee } from "@/components/sections/logo-marquee";
 import { ServicesGrid } from "@/components/sections/services-grid";
 import { Stats } from "@/components/sections/stats";
+import { CaseStudiesPreview } from "@/components/sections/case-study-card";
 import { Process } from "@/components/sections/process";
+import { Testimonials } from "@/components/sections/testimonials";
 import { CtaBanner } from "@/components/sections/cta-banner";
 
 export default function HomePage() {
@@ -19,7 +21,9 @@ export default function HomePage() {
       <LogoMarquee />
       <ServicesGrid />
       <Stats />
+      <CaseStudiesPreview />
       <Process />
+      <Testimonials />
       <CtaBanner />
     </>
   );

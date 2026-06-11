@@ -64,7 +64,7 @@ export function ServicesGrid() {
         <SectionHeading
           eyebrow="Services"
           title="Everything your stack needs, under one roof"
-          lead="Four practices, one accountable partner — from the first deploy to day-2 operations."
+          lead="Four practices, one accountable partner, from the first deploy to day-2 operations."
           align="center"
         />
       </Reveal>
