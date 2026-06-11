@@ -1,3 +1,9 @@
+//==============================================================================
+// TYPESCRIPT CONFIGURATION
+//==============================================================================
+// Strict mode, bundler resolution and the `@/*` alias for src/. JSONC comments
+// are supported by the TypeScript compiler.
+//------------------------------------------------------------------------------
 {
   "compilerOptions": {
     "target": "ES2017",

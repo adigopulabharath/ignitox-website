@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<!-- =========================================================================
+     IGNITOX WEBSITE — README
+     ========================================================================= -->
 
-## Getting Started
+# Ignitox Website
 
-First, run the development server:
+Marketing site for **Ignitox** — IT solutions: Cloud (AWS, Azure, GCP),
+Website Hosting, Web Development and IT Consulting. Dark, Vercel-inspired
+design; static-first Next.js; self-hosted on a Hetzner VPS for the price of
+the server and a domain — everything else is free tier.
+
+📋 **Read [PLAN.md](./PLAN.md) first** — architecture, security model and
+roadmap. Conventions live in [AGENTS.md](./AGENTS.md).
+
+## Stack
+
+Next.js 16 (App Router, standalone output) · React 19 · TypeScript ·
+Tailwind CSS v4 · Motion · Zod · OpenAPI 3.1 (schema-first API) · Docker +
+nginx · GitHub Actions → GHCR → Hetzner · Cloudflare free tier in front.
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+cp .env.example .env.local   # optional — the form logs to stdout without keys
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` / `npm run typecheck` | Quality gates (same as CI) |
+| `npm run gen:api` | Regenerate API types from `openapi/openapi.yaml` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment variables
 
-## Learn More
+See [.env.example](./.env.example). Summary:
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Scope | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | build | Canonical origin for metadata/sitemap |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | build | Turnstile widget (public) |
+| `TURNSTILE_SECRET_KEY` | runtime | Server-side Turnstile verification |
+| `RESEND_API_KEY` | runtime | Contact-form email delivery |
+| `CONTACT_TO_EMAIL` / `CONTACT_FROM_EMAIL` | runtime | Inbox & verified sender |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The VPS never builds — CI builds the image, the server pulls and runs it:
 
-## Deploy on Vercel
+1. **Once:** run `deploy/server-bootstrap.sh` on a fresh Ubuntu 24.04 server,
+   then follow its printed next steps (Cloudflare Origin cert, `.env`,
+   domain in nginx config).
+2. **In GitHub:** set secrets `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`,
+   `SSH_KNOWN_HOSTS`; set variables `DEPLOY_ENABLED=true`, `SITE_URL` and
+   (recommended) `TURNSTILE_SITE_KEY`.
+3. **Every push to `main`:** `.github/workflows/deploy.yml` builds → pushes
+   to GHCR → SSH-deploys `deploy/` → `docker compose up -d` → health-checks.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Rollback: re-run the deploy with a previous image tag
+(`IGNITOX_IMAGE_TAG=<old sha> docker compose up -d` on the server).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Security
+
+OWASP-aligned throughout — strict security headers (nginx), Turnstile +
+honeypot + two-layer rate limiting on the API, strict Zod validation,
+non-root containers, hardened VPS (key-only SSH, UFW, fail2ban), Dependabot
++ `npm audit` gating CI, weekly OWASP ZAP baseline scan. Details in
+[PLAN.md §7](./PLAN.md).
