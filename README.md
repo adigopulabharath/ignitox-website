@@ -31,6 +31,21 @@ cp .env.example .env.local   # optional — the form logs to stdout without keys
 npm run dev                  # http://localhost:3000
 ```
 
+## Content management (Payload CMS)
+
+The admin panel lives at `/admin` on the same app (cookie auth, same origin,
+no client secrets). Content is stored in SQLite at `./data/ignitox.db`,
+which is a mounted volume in production. Back it up with a nightly file copy.
+
+- First run: `npm run seed` imports the static content and creates the first
+  admin user. Set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` first, and
+  change the password right after logging in.
+- Services, posts, case studies, testimonials and site settings are all
+  editable. Published changes reach the live site within five minutes.
+- Pages read the CMS first and fall back to `src/content/` when the database
+  is empty or unavailable, so CI builds never depend on a database.
+- Set `PAYLOAD_SECRET` in production (`openssl rand -hex 32`).
+
 ## Scripts
 
 | Command | Purpose |

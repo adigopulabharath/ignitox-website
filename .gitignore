@@ -37,6 +37,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# CMS data (SQLite database + uploaded media live on a volume, not in git)
+/data
+
 # vercel
 .vercel
 

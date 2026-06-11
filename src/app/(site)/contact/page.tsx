@@ -6,6 +6,8 @@
 
 import type { Metadata } from "next";
 import { SITE } from "@/content/site";
+import { SERVICE_OPTIONS } from "@/lib/contact-schema";
+import { getServices } from "@/lib/content";
 import { Container } from "@/components/ui/container";
 import { ContactForm } from "@/components/sections/contact-form";
 import { ClockIcon, MailIcon, MapPinIcon } from "@/components/icons";
@@ -44,7 +46,13 @@ const DETAILS = [
 //------------------------------------------------------------------------------
 // PAGE
 //------------------------------------------------------------------------------
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Only offer services the API contract actually accepts.
+  const allowed = new Set<string>(SERVICE_OPTIONS);
+  const services = (await getServices())
+    .filter((service) => allowed.has(service.slug))
+    .map((service) => ({ slug: service.slug, name: service.name }));
+
   return (
     <section className="relative overflow-hidden">
       <div
@@ -98,7 +106,7 @@ export default function ContactPage() {
           FORM
         --------------------------------------------------------------------*/}
         <div className="animate-fade-up [animation-delay:200ms]">
-          <ContactForm />
+          <ContactForm services={services} />
         </div>
       </Container>
     </section>

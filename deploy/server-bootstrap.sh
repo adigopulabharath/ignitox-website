@@ -133,6 +133,8 @@ usermod -aG docker "$DEPLOY_USER"
 #------------------------------------------------------------------------------
 echo "==> Preparing $APP_DIR and $CERT_DIR"
 install -d -o "$DEPLOY_USER" -g "$DEPLOY_USER" "$APP_DIR"
+# CMS volume: owned by uid 1000 to match the non-root user inside the image.
+install -d -o 1000 -g 1000 "$APP_DIR/data"
 install -d -m 700 "$CERT_DIR"
 
 #------------------------------------------------------------------------------

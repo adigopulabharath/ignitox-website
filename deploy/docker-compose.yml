@@ -19,6 +19,10 @@ services:
     env_file: .env
     expose:
       - "3000"
+    volumes:
+      # CMS database + uploaded media. Host dir must be writable by uid 1000
+      # (the bootstrap script sets this up). Back up with a nightly file copy.
+      - ./data:/app/data
     networks:
       - internal
     security_opt:

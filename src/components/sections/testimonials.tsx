@@ -5,12 +5,15 @@
 // (currently placeholder) lives in src/content/testimonials.ts.
 //------------------------------------------------------------------------------
 
-import { CLIENT_LOGOS, TESTIMONIALS } from "@/content/testimonials";
+import { CLIENT_LOGOS } from "@/content/testimonials";
+import { getTestimonials } from "@/lib/content";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { Reveal } from "@/components/motion/reveal";
 
-export function Testimonials() {
+export async function Testimonials() {
+  const testimonials = await getTestimonials();
+
   return (
     <Section>
       {/*----------------------------------------------------------------------
@@ -44,7 +47,7 @@ export function Testimonials() {
       </Reveal>
 
       <div className="mt-12 grid gap-6 md:grid-cols-3">
-        {TESTIMONIALS.map((testimonial, index) => (
+        {testimonials.map((testimonial, index) => (
           <Reveal key={testimonial.name} delay={index * 0.07} className="h-full">
             <SpotlightCard className="h-full rounded-2xl border border-border bg-surface">
               <figure className="flex h-full flex-col p-7">

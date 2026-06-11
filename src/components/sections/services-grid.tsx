@@ -6,7 +6,8 @@
 //------------------------------------------------------------------------------
 
 import Link from "next/link";
-import { SERVICES, type Service } from "@/content/services";
+import type { Service } from "@/content/services";
+import { getServices } from "@/lib/content";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { Reveal } from "@/components/motion/reveal";
@@ -57,7 +58,9 @@ export function ServiceCard({ service }: { service: Service }) {
 //------------------------------------------------------------------------------
 // SECTION (homepage)
 //------------------------------------------------------------------------------
-export function ServicesGrid() {
+export async function ServicesGrid() {
+  const services = await getServices();
+
   return (
     <Section id="services">
       <Reveal>
@@ -70,7 +73,7 @@ export function ServicesGrid() {
       </Reveal>
 
       <div className="mt-14 grid gap-6 md:grid-cols-2">
-        {SERVICES.map((service, index) => (
+        {services.map((service, index) => (
           <Reveal key={service.slug} delay={index * 0.08} className="h-full">
             <ServiceCard service={service} />
           </Reveal>

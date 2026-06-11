@@ -9,8 +9,9 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/content/site";
+import { getServices } from "@/lib/content";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Header } from "@/components/sections/header";
+import { Header, type NavService } from "@/components/sections/header";
 import { Footer } from "@/components/sections/footer";
 import { CursorGlow } from "@/components/motion/cursor-glow";
 import { JsonLd } from "@/components/json-ld";
@@ -72,11 +73,19 @@ const organizationJsonLd = {
 //------------------------------------------------------------------------------
 // LAYOUT
 //------------------------------------------------------------------------------
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Mega menu + mobile nav data (client components can't query the CMS).
+  const navServices: NavService[] = (await getServices()).map((service) => ({
+    slug: service.slug,
+    name: service.name,
+    tagline: service.tagline,
+    icon: service.icon,
+  }));
+
   return (
     // suppressHydrationWarning: next-themes mutates the class on <html> before
     // hydration to apply the persisted theme.
@@ -89,7 +98,7 @@ export default function RootLayout({
         <ThemeProvider>
           <JsonLd data={organizationJsonLd} />
           <CursorGlow />
-          <Header />
+          <Header services={navServices} />
           <main className="flex-1">{children}</main>
           <Footer />
         </ThemeProvider>

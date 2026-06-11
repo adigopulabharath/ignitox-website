@@ -6,7 +6,7 @@
 
 import Link from "next/link";
 import { COMPANY_NAV, LEGAL_NAV, SITE } from "@/content/site";
-import { SERVICES } from "@/content/services";
+import { getServices } from "@/lib/content";
 import { Logo } from "@/components/logo";
 import { Container } from "@/components/ui/container";
 import { NewsletterForm } from "@/components/sections/newsletter-form";
@@ -42,7 +42,9 @@ function LinkGroup({ heading, links }: LinkGroupProps) {
 //------------------------------------------------------------------------------
 // FOOTER
 //------------------------------------------------------------------------------
-export function Footer() {
+export async function Footer() {
+  const services = await getServices();
+
   return (
     <footer className="border-t border-border">
       <Container className="py-16">
@@ -80,7 +82,7 @@ export function Footer() {
           {/* Link groups */}
           <LinkGroup
             heading="Services"
-            links={SERVICES.map((service) => ({
+            links={services.map((service) => ({
               label: service.name,
               href: `/services/${service.slug}`,
             }))}

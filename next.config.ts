@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 import type { NextConfig } from "next";
+import { withPayload } from "@payloadcms/next/withPayload";
 
 //------------------------------------------------------------------------------
 // BASELINE SECURITY HEADERS (NGINX IS THE SOURCE OF TRUTH IN PRODUCTION)
@@ -29,9 +30,14 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   reactStrictMode: true,
+  // sharp's platform-specific binaries (@img/*) are not picked up by output
+  // file tracing; without this the Payload admin 500s in the Docker image.
+  outputFileTracingIncludes: {
+    "/**": ["./node_modules/@img/**", "./node_modules/sharp/**"],
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
 };
 
-export default nextConfig;
+export default withPayload(nextConfig);

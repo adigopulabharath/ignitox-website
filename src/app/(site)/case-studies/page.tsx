@@ -1,37 +1,39 @@
 //==============================================================================
-// PAGE: INSIGHTS (/insights)
+// PAGE: CASE STUDIES (/case-studies)
 //==============================================================================
-// Blog listing — newest post featured large, the rest in a grid. Fed entirely
-// by src/content/insights.ts.
+// Listing of client engagements, fed by src/content/case-studies.ts.
 //------------------------------------------------------------------------------
 
 import type { Metadata } from "next";
-import { POSTS } from "@/content/insights";
+import { getCaseStudies } from "@/lib/content";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Reveal } from "@/components/motion/reveal";
-import { PostCard } from "@/components/sections/post-card";
+import { CaseStudyCard } from "@/components/sections/case-study-card";
 import { CtaBanner } from "@/components/sections/cta-banner";
 
 //------------------------------------------------------------------------------
 // METADATA
 //------------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: "Insights",
+  title: "Case Studies",
   description:
-    "Practical engineering insights from the Ignitox team on cloud, hosting, performance and the craft of running production systems.",
+    "Real engagements with real numbers: cloud migrations, storefront rebuilds and managed hosting projects delivered by the Ignitox team.",
 };
 
 //------------------------------------------------------------------------------
 // PAGE
 //------------------------------------------------------------------------------
-export default function InsightsPage() {
-  const [featured, ...rest] = POSTS;
+// Refresh from the CMS every 5 minutes without a redeploy.
+export const revalidate = 300;
+
+export default async function CaseStudiesPage() {
+  const caseStudies = await getCaseStudies();
 
   return (
     <>
       {/*----------------------------------------------------------------------
-        INSIGHTS HERO
+        CASE STUDIES HERO
       ----------------------------------------------------------------------*/}
       <section className="relative overflow-hidden border-b border-border">
         <div
@@ -40,37 +42,29 @@ export default function InsightsPage() {
         />
         <Container className="relative pb-14 pt-20 md:pb-16 md:pt-28">
           <p className="animate-fade-up font-mono text-xs font-medium uppercase tracking-[0.2em] text-flame">
-            Insights
+            Case studies
           </p>
           <h1 className="animate-fade-up mt-4 max-w-2xl text-4xl font-semibold tracking-tighter text-foreground [animation-delay:100ms] md:text-6xl">
-            Notes from the <span className="text-gradient">engine room</span>
+            Work that <span className="text-gradient">speaks in numbers</span>
           </h1>
           <p className="animate-fade-up mt-5 max-w-2xl text-base text-muted [animation-delay:200ms] md:text-lg">
-            Practical write-ups on cloud, hosting and web performance. The
-            things we learn keeping production systems fast and online.
+            Every project here shipped to production. The names are anonymized,
+            the numbers are the point.
           </p>
         </Container>
       </section>
 
       {/*----------------------------------------------------------------------
-        POSTS
+        ALL CASE STUDIES
       ----------------------------------------------------------------------*/}
       <Section>
-        {featured && (
-          <Reveal>
-            <PostCard post={featured} featured />
-          </Reveal>
-        )}
-
-        {rest.length > 0 && (
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            {rest.map((post, index) => (
-              <Reveal key={post.slug} delay={index * 0.07} className="h-full">
-                <PostCard post={post} />
-              </Reveal>
-            ))}
-          </div>
-        )}
+        <div className="grid gap-6 md:grid-cols-2">
+          {caseStudies.map((study, index) => (
+            <Reveal key={study.slug} delay={index * 0.07} className="h-full">
+              <CaseStudyCard study={study} />
+            </Reveal>
+          ))}
+        </div>
       </Section>
 
       <CtaBanner />

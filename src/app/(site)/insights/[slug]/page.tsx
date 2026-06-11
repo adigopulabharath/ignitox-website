@@ -8,12 +8,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import {
-  formatPostDate,
-  getPost,
-  POSTS,
-  type PostBlock,
-} from "@/content/insights";
+import { formatPostDate, type PostBlock } from "@/content/insights";
+import { getPostBySlug, getPosts } from "@/lib/content";
 import { SITE } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -25,8 +21,12 @@ import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 //------------------------------------------------------------------------------
 // STATIC GENERATION & METADATA
 //------------------------------------------------------------------------------
-export function generateStaticParams() {
-  return POSTS.map((post) => ({ slug: post.slug }));
+// Refresh from the CMS every 5 minutes; unknown slugs render on demand.
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({
@@ -35,7 +35,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPostBySlug(slug);
   if (!post) return {};
 
   return {
@@ -100,10 +100,12 @@ export default async function InsightArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const related = POSTS.filter((entry) => entry.slug !== post.slug).slice(0, 2);
+  const related = (await getPosts())
+    .filter((entry) => entry.slug !== post.slug)
+    .slice(0, 2);
 
   //----------------------------------------------------------------------------
   // STRUCTURED DATA (Article + Breadcrumb)

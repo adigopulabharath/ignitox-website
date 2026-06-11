@@ -46,6 +46,9 @@ COPY --from=builder --chown=node:node /app/public ./public
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 
+# CMS data (SQLite + media) lives here; a volume is mounted over it in prod.
+RUN mkdir -p /app/data && chown node:node /app/data
+
 USER node
 EXPOSE 3000
 

@@ -3,7 +3,8 @@
 //==============================================================================
 
 import Link from "next/link";
-import { CASE_STUDIES, type CaseStudy } from "@/content/case-studies";
+import type { CaseStudy } from "@/content/case-studies";
+import { getCaseStudies } from "@/lib/content";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { Reveal } from "@/components/motion/reveal";
@@ -60,8 +61,8 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
 //------------------------------------------------------------------------------
 // HOMEPAGE PREVIEW (two newest studies)
 //------------------------------------------------------------------------------
-export function CaseStudiesPreview() {
-  const featured = CASE_STUDIES.slice(0, 2);
+export async function CaseStudiesPreview() {
+  const featured = (await getCaseStudies()).slice(0, 2);
 
   return (
     <Section>

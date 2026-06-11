@@ -8,7 +8,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CASE_STUDIES, getCaseStudy } from "@/content/case-studies";
+import { getCaseStudies, getCaseStudyBySlug } from "@/lib/content";
 import { SITE } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -21,8 +21,12 @@ import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 //------------------------------------------------------------------------------
 // STATIC GENERATION & METADATA
 //------------------------------------------------------------------------------
-export function generateStaticParams() {
-  return CASE_STUDIES.map((study) => ({ slug: study.slug }));
+// Refresh from the CMS every 5 minutes; unknown slugs render on demand.
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const studies = await getCaseStudies();
+  return studies.map((study) => ({ slug: study.slug }));
 }
 
 export async function generateMetadata({
@@ -31,7 +35,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const study = getCaseStudy(slug);
+  const study = await getCaseStudyBySlug(slug);
   if (!study) return {};
 
   return {
@@ -50,10 +54,12 @@ export default async function CaseStudyPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const study = getCaseStudy(slug);
+  const study = await getCaseStudyBySlug(slug);
   if (!study) notFound();
 
-  const related = CASE_STUDIES.filter((entry) => entry.slug !== study.slug).slice(0, 2);
+  const related = (await getCaseStudies())
+    .filter((entry) => entry.slug !== study.slug)
+    .slice(0, 2);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",

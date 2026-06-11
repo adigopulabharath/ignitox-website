@@ -25,7 +25,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@payload-config": ["./src/payload.config.ts"],
+      // sharp's "exports" map hides its types from bundler resolution;
+      // point TS at the real declarations (runtime resolution is unaffected).
+      "sharp": ["./node_modules/sharp/lib/index"]
     }
   },
   "include": [

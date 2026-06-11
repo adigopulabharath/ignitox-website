@@ -14,7 +14,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { MAIN_NAV } from "@/content/site";
-import { SERVICES } from "@/content/services";
+import type { ServiceIconName } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button";
@@ -29,7 +29,17 @@ import {
 } from "@/components/icons";
 import { cx } from "@/lib/cx";
 
-export function Header() {
+//------------------------------------------------------------------------------
+// PROPS (services come from the CMS via the root layout)
+//------------------------------------------------------------------------------
+export type NavService = {
+  slug: string;
+  name: string;
+  tagline: string;
+  icon: ServiceIconName;
+};
+
+export function Header({ services }: { services: NavService[] }) {
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -149,7 +159,7 @@ export function Header() {
             <Container className="grid grid-cols-[2fr_1fr] gap-8 py-8">
               {/* Service links */}
               <div className="grid grid-cols-2 gap-2">
-                {SERVICES.map((service) => {
+                {services.map((service) => {
                   const IconComponent = SERVICE_ICONS[service.icon];
                   return (
                     <Link
@@ -218,7 +228,7 @@ export function Header() {
             <p className="px-3 pb-1 pt-2 font-mono text-xs uppercase tracking-[0.2em] text-muted/70">
               Services
             </p>
-            {SERVICES.map((service) => (
+            {services.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}

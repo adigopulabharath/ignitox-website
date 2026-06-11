@@ -5,8 +5,12 @@
 // at build time.
 //------------------------------------------------------------------------------
 
+// Refresh CMS-driven sections every 5 minutes without a redeploy.
+export const revalidate = 300;
+
 import { Hero } from "@/components/sections/hero";
 import { LogoMarquee } from "@/components/sections/logo-marquee";
+import { FlowDiagram } from "@/components/sections/flow-diagram";
 import { ServicesGrid } from "@/components/sections/services-grid";
 import { Stats } from "@/components/sections/stats";
 import { CaseStudiesPreview } from "@/components/sections/case-study-card";
@@ -19,6 +23,7 @@ export default function HomePage() {
     <>
       <Hero />
       <LogoMarquee />
+      <FlowDiagram />
       <ServicesGrid />
       <Stats />
       <CaseStudiesPreview />

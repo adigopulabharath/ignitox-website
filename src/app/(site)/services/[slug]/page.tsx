@@ -8,7 +8,7 @@
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getService, SERVICES } from "@/content/services";
+import { getServiceBySlug, getServices } from "@/lib/content";
 import { SITE } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -23,8 +23,12 @@ import { CheckIcon, ChevronDownIcon, SERVICE_ICONS } from "@/components/icons";
 //------------------------------------------------------------------------------
 // STATIC GENERATION & METADATA
 //------------------------------------------------------------------------------
-export function generateStaticParams() {
-  return SERVICES.map((service) => ({ slug: service.slug }));
+// Refresh from the CMS every 5 minutes; unknown slugs render on demand.
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const services = await getServices();
+  return services.map((service) => ({ slug: service.slug }));
 }
 
 export async function generateMetadata({
@@ -33,7 +37,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getServiceBySlug(slug);
   if (!service) return {};
 
   return {
@@ -52,11 +56,13 @@ export default async function ServicePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getServiceBySlug(slug);
   if (!service) notFound();
 
   const IconComponent = SERVICE_ICONS[service.icon];
-  const relatedServices = SERVICES.filter((entry) => entry.slug !== service.slug);
+  const relatedServices = (await getServices()).filter(
+    (entry) => entry.slug !== service.slug,
+  );
 
   //----------------------------------------------------------------------------
   // STRUCTURED DATA (Service + Breadcrumb + FAQ)

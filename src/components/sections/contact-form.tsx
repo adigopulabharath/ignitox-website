@@ -10,7 +10,6 @@
 
 import { useState } from "react";
 import Script from "next/script";
-import { SERVICES } from "@/content/services";
 import { Button } from "@/components/ui/button";
 
 //------------------------------------------------------------------------------
@@ -41,7 +40,13 @@ const labelClasses = "mb-2 block text-sm font-medium text-foreground";
 //------------------------------------------------------------------------------
 // FORM
 //------------------------------------------------------------------------------
-export function ContactForm() {
+type ContactFormProps = {
+  /** Options for the service selector. NOTE: slugs must exist in the OpenAPI
+   * `service` enum; adding a new service also means updating the contract. */
+  services: Array<{ slug: string; name: string }>;
+};
+
+export function ContactForm({ services }: ContactFormProps) {
   const [status, setStatus] = useState<Status>({ state: "idle" });
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -143,7 +148,7 @@ export function ContactForm() {
             defaultValue="general"
             className={fieldClasses}
           >
-            {SERVICES.map((service) => (
+            {services.map((service) => (
               <option key={service.slug} value={service.slug}>
                 {service.name}
               </option>

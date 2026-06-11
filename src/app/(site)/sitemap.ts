@@ -4,11 +4,15 @@
 
 import type { MetadataRoute } from "next";
 import { SITE } from "@/content/site";
-import { SERVICES } from "@/content/services";
-import { POSTS } from "@/content/insights";
-import { CASE_STUDIES } from "@/content/case-studies";
+import { getCaseStudies, getPosts, getServices } from "@/lib/content";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [services, posts, caseStudies] = await Promise.all([
+    getServices(),
+    getPosts(),
+    getCaseStudies(),
+  ]);
+
   //----------------------------------------------------------------------------
   // STATIC ROUTES
   //----------------------------------------------------------------------------
@@ -26,7 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   //----------------------------------------------------------------------------
   // SERVICE ROUTES
   //----------------------------------------------------------------------------
-  const serviceRoutes: MetadataRoute.Sitemap = SERVICES.map((service) => ({
+  const serviceRoutes: MetadataRoute.Sitemap = services.map((service) => ({
     url: `${SITE.url}/services/${service.slug}`,
     changeFrequency: "monthly",
     priority: 0.9,
@@ -35,7 +39,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   //----------------------------------------------------------------------------
   // INSIGHT ROUTES
   //----------------------------------------------------------------------------
-  const postRoutes: MetadataRoute.Sitemap = POSTS.map((post) => ({
+  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${SITE.url}/insights/${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: "yearly",
@@ -45,7 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   //----------------------------------------------------------------------------
   // CASE STUDY ROUTES
   //----------------------------------------------------------------------------
-  const caseStudyRoutes: MetadataRoute.Sitemap = CASE_STUDIES.map((study) => ({
+  const caseStudyRoutes: MetadataRoute.Sitemap = caseStudies.map((study) => ({
     url: `${SITE.url}/case-studies/${study.slug}`,
     lastModified: new Date(study.date),
     changeFrequency: "yearly",
